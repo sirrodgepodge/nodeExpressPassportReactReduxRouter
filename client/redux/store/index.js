@@ -1,17 +1,22 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
 import { persistState } from 'redux-devtools';
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
-import { DevTools } from '../DevTools';
 
-export function configureStore(initialState) {
+
+export function configureStore(history, initialState) {
   let finalCreateStore;
 
+  // Sync dispatched route actions to the history
+  const reduxRouterMiddleware = routerMiddleware(history);
+
   if (process.env.NODE_ENV === 'production') {
-    finalCreateStore = applyMiddleware(thunk)(createStore);
+    finalCreateStore = applyMiddleware(thunk, reduxRouterMiddleware)(createStore);
   } else {
+    const { DevTools } = require('../DevTools');
     finalCreateStore = compose(
-      applyMiddleware(thunk),
+      applyMiddleware(thunk, reduxRouterMiddleware),
       DevTools.instrument(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(createStore);
