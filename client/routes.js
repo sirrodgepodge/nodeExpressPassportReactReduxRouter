@@ -7,10 +7,8 @@ import authedRoute from './lib/authedRoute';
 // actual app components
 import App from './App';
 import Blog from './Blog';
+import Profile from './Profile';
 import NotFound from './NotFound';
-
-// temporary
-const Profile = () => <div/>;
 
 export default store => (
   <Route path='/' component={App}>

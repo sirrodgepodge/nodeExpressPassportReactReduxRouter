@@ -11,6 +11,15 @@
   border-bottom-left-radius: 5px;
 }
 
+.profile-view-toggle {
+  &:visited {
+    color: inherit;
+  }
+  &:hover {
+    color: #f8e813;
+  }
+}
+
 .navbar-header {
     z-index: 1;
     cursor: pointer;
@@ -61,20 +70,14 @@
 
 .local-auth-button:hover,
 .log-out-button:hover {
-    color: #f8e813;
+  color: #f8e813;
 }
 
-.log-out-button:hover, .log-out-button:focus {
-  background-color: #332f2b !important;
-  border: none;
-}
-
-.log-out-button {
-  visibility: hidden;
-}
-
-.log-out-button.show {
-  visibility: visible;
+.profile-view-toggle, .log-out-button {
+  &:hover, &:focus {
+    background-color: transparent !important;
+    border: none;
+  }
 }
 
 .local-auth-button {
@@ -87,6 +90,7 @@
 
 .o-auth-btn,
 .local-auth-button,
+.profile-view-toggle,
 .log-out-button {
   transition: color .2s;
 }

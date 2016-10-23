@@ -1,6 +1,7 @@
 // Component here uses ES6 destructuring syntax in import, what is means is "retrieve the property 'Component' off of the object exported from the 'react'"
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { get } from 'lodash';
 
 // styling
@@ -16,7 +17,8 @@ import {
 
 
 @connect((store) => ({
-  user: store.user
+  user: store.user,
+  currentRoute: store.routing.locationBeforeTransitions.pathname
 }))
 export default class NavAuth extends Component {
   static propTypes = {
@@ -37,6 +39,10 @@ export default class NavAuth extends Component {
     }),
     dispatch: PropTypes.func.isRequired
   }
+
+  viewProfile = () => this.props.dispatch(push('/profile'))
+
+  viewBlog = () => this.props.dispatch(push('/'))
 
   logIn = () => {
     const email = get(this.refs, 'email.value');
@@ -63,9 +69,23 @@ export default class NavAuth extends Component {
     const user = this.props.user;
     const loggedIn = !!get(user, 'email'); // if user has email property, they're logged in
     const authErrorMessage = get(user, 'authErrorMessage');
+    const viewingProfile = this.props.currentRoute === '/profile';
 
     return (
       <ul className="navbar-auth nav navbar-nav navbar-right">
+        {
+          loggedIn
+          &&
+          <li className="nav-button">
+            <a
+              className="profile-view-toggle"
+              href="#"
+              onClick={!viewingProfile ? this.viewProfile : this.viewBlog}
+            >
+              {`VIEW ${!viewingProfile ? 'PROFILE' : 'BLOG'}`}
+            </a>
+          </li>
+        }
         <li
           className={`nav user-photo ${get(user, 'google.photo') && 'show'}`}
           style={get(user, 'google.photo') && {backgroundImage: `url(${user.google.photo})`}}
@@ -153,7 +173,7 @@ export default class NavAuth extends Component {
             loggedIn
             &&
             <a
-              className="nav-button log-out-button show"
+              className="nav-button log-out-button"
               href="#"
               onClick={this.logout}
             >
