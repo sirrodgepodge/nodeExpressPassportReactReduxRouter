@@ -9,7 +9,7 @@ export default function userReducer(state = initialState, action) {
       return action.user;
 
     case actionTypes.LOCAL_AUTH :
-      return action.user;
+      return { ...state, ...action.user };
 
     case actionTypes.LOG_OUT :
       return null;

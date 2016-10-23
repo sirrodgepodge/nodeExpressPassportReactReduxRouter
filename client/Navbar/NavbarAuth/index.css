@@ -109,3 +109,8 @@
 .user-photo.show {
   display: block !important;
 }
+
+.auth-error {
+  color: red;
+  text-align: right;
+}

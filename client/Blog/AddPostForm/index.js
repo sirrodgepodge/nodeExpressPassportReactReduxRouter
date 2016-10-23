@@ -44,7 +44,8 @@ export default class PostForm extends Component {
 
   addPost = () => this.props.dispatch(
     addPostRequest({
-      ...this.props.postForm,
+      title: this.props.postForm.title,
+      body: this.props.postForm.body,
       ...this.props.userInfo
     })
   );

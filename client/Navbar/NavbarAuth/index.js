@@ -16,9 +16,9 @@ import { localAuthRequest, logoutRequest } from '../../redux/actionCreators/user
 export default class NavAuth extends Component {
   static propTypes = {
     user: PropTypes.shape({
-      email: PropTypes.string.isRequired,
-      createdDate: PropTypes.string.isRequired,
-      hasPassword: PropTypes.bool.isRequired,
+      email: PropTypes.string,
+      createdDate: PropTypes.string,
+      hasPassword: PropTypes.bool,
       google: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         photo: PropTypes.string.isRequired,
@@ -45,6 +45,8 @@ export default class NavAuth extends Component {
 
   render() {
     const user = this.props.user;
+    const loggedIn = !!get(user, 'email'); // if user has email property, they're logged in
+    const authErrorMessage = get(user, 'authErrorMessage');
 
     return (
       <ul className="navbar-auth nav navbar-nav navbar-right">
@@ -58,26 +60,26 @@ export default class NavAuth extends Component {
         />
         <li className="nav-button">
           {
-            (!user || !user.email || !user.hasPassword || !user.google || !user.google.photo || !user.facebook || !user.facebook.photo)
+            (!loggedIn || !user.hasPassword || !user.google || !user.facebook) // check user ""
             &&
             <span>
               LOG IN &#10161;
               {
-                (!user || !user.google)
+                !get(user, 'google')
                 &&
                 <a href="/auth/google">
                   <i className="fa fa-google o-auth-btn"/>
                 </a>
               }
               {
-                (!user || !user.facebook)
+                !get(user, 'facebook')
                 &&
                 <a href="/auth/facebook">
                   <i className="fa fa-facebook o-auth-btn"/>
                 </a>
               }
               {
-                (!user || !user.email)
+                !loggedIn
                 &&
                 <input
                   className="nav-input"
@@ -88,7 +90,7 @@ export default class NavAuth extends Component {
               }
               {/*Repeating logic the the two below because of some CSS annoying-ness*/}
               {
-                (!user || !user.hasPassword)
+                !get(user, 'hasPassword')
                 &&
                 <input
                   className="nav-input"
@@ -98,7 +100,7 @@ export default class NavAuth extends Component {
                 />
               }
               {
-                (!user || !user.hasPassword)
+                !get(user, 'hasPassword')
                 &&
                 <button
                   className="local-auth-button"
@@ -110,7 +112,7 @@ export default class NavAuth extends Component {
             </span>
           }
           {
-            user
+            loggedIn
             &&
             <a
               className="nav-button log-out-button show"
@@ -121,6 +123,13 @@ export default class NavAuth extends Component {
             </a>
           }
         </li>
+        {
+          authErrorMessage
+          &&
+          <div className="auth-error">
+            {authErrorMessage}
+          </div>
+        }
       </ul>
     );
   }
