@@ -13,7 +13,7 @@ export default function postFormReducer(state = initialState, action) {
   switch (action.type) {
     case actionTypes.EDIT_POST :
       // state is immutable, each change replaces an old object with a new one
-      return { ...state.postForm, ...action.post };
+      return { ...state, ...action.post };
 
     case actionTypes.ADD_POST :
       // state is immutable, each change replaces an old object with a new one
