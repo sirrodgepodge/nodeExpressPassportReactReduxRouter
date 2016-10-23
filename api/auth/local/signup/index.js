@@ -4,7 +4,6 @@ const User = mongoose.model('User');
 
 // utility
 import _ from 'lodash';
-import cleanUserObj from '../../utils/cleanUserObj';
 
 
 export default api => api.post('/signup', signupMiddleWare)
@@ -17,6 +16,7 @@ export function signupMiddleWare(req, res, next) {
         email: req.body.email
       }).save() :
       foundUser.password ?
+      // if user already exists send back "401 (unauthorized)" response
       Promise.reject({error: 'A user with this email already exists', status: 401}) :
       Promise.reject({error: 'It looks as though you\'ve signed up through Facebook or Google, log with that method and add a password to your account if you\'d like', status: 401}))
       .then(storedUser => req.logIn(storedUser, loginErr => {

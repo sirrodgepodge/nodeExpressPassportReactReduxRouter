@@ -9,7 +9,7 @@ import BlogPost from './BlogPost';
 import {
   editPost,
   deletePostRequest
-} from '../../redux/actionCreators';
+} from '../../redux/actionCreators/posts';
 
 
 @connect(store => ({

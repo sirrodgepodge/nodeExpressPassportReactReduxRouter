@@ -10,7 +10,7 @@ import {
   editPost,
   addPostRequest,
   updatePostRequest,
-} from '../../redux/actionCreators';
+} from '../../redux/actionCreators/posts';
 
 
 @connect(store => ({

@@ -7,7 +7,7 @@ import { get } from 'lodash';
 import './index.css';
 
 // action creators
-import { localAuthRequest, logoutRequest } from '../../redux/actionCreators';
+import { localAuthRequest, logoutRequest } from '../../redux/actionCreators/user';
 
 
 @connect((store) => ({

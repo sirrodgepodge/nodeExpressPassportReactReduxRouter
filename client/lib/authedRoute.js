@@ -1,4 +1,4 @@
-import { initializationRequests } from '../redux/actionCreators';
+import { initializationRequests } from '../redux/actionCreators/initialize';
 
 const checkAuth = (replace, cb, store) => () => {
   if (!store.getState().user) {
@@ -10,7 +10,7 @@ const checkAuth = (replace, cb, store) => () => {
 
 export default store => (nextState, replace, cb) => {
   const checkAuthCb = checkAuth(replace, cb, store);
-  if (!store.getState().user) { // attempt to load user session if not logged in 
+  if (!store.getState().user) { // attempt to load user session if not logged in
     store.dispatch(initializationRequests()).then(checkAuthCb);
   } else {
     checkAuthCb();

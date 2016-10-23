@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // action creators
-import { initializationRequests } from './redux/actionCreators';
+import { initializationRequests } from './redux/actionCreators/initialize';
 
 // other components
 import Navbar from './Navbar';
