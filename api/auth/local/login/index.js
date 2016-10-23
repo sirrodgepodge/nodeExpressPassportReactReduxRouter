@@ -1,5 +1,4 @@
 import passport from 'passport';
-import { signupMiddleWare } from '../signup';
 
 
 export default api => {
@@ -16,12 +15,10 @@ export default api => {
 
       // if auth fails we sign the user up, not something you'd do in a real app! You might instead use something like the commented out code below
       if (!user) {
-        // return res.status(401).json({
-        //   status: 401,
-        //   error: 'Invalid login credentials.'
-        // });
-
-        return signupMiddleWare(req, res, next);
+        return res.status(401).json({
+          status: 401,
+          error: 'Invalid login credentials.'
+        });
       }
 
       // if username and password was correct

@@ -7,7 +7,12 @@ import { get } from 'lodash';
 import './index.css';
 
 // action creators
-import { localAuthRequest, logoutRequest } from '../../redux/actionCreators/user';
+import {
+  logIn,
+  signUp,
+  addPassword,
+  logoutRequest
+} from '../../redux/actionCreators/user';
 
 
 @connect((store) => ({
@@ -33,15 +38,26 @@ export default class NavAuth extends Component {
     dispatch: PropTypes.func.isRequired
   }
 
-  handleLocalAuth = () => {
-    const email = this.refs.email && this.refs.email.value;
-    const password = this.refs.password && this.refs.password.value;
-    this.props.dispatch(
-      localAuthRequest(this.props.user ? this.props.user._id : null, email, password)
-    );
+  logIn = () => {
+    const email = get(this.refs, 'email.value');
+    const password = get(this.refs, 'password.value');
+    this.props.dispatch(logIn(email, password));
+  }
+
+  signUp = () => {
+    const email = get(this.refs, 'email.value');
+    const password = get(this.refs, 'password.value');
+    this.props.dispatch(signUp(email, password));
+  }
+
+  addPassword = () => {
+    const password = get(this.refs, 'password.value');
+    this.props.dispatch(addPassword(this.props.user._id, password));
   }
 
   logout = () => this.props.dispatch(logoutRequest());
+
+  loginOnEnterKey = e => e.keyCode === 13 && this.logIn();
 
   render() {
     const user = this.props.user;
@@ -58,7 +74,10 @@ export default class NavAuth extends Component {
           className={`nav user-photo ${get(user, 'facebook.photo') && 'show'}`}
           style={get(user, 'facebook.photo') && {backgroundImage: `url(${user.facebook.photo})`}}
         />
-        <li className="nav-button">
+        <li
+          className="nav-button"
+          onKeyDown={this.loginOnEnterKey}
+        >
           {
             (!loggedIn || !user.hasPassword || !user.google || !user.facebook) // check user ""
             &&
@@ -88,7 +107,6 @@ export default class NavAuth extends Component {
                   type="text"
                 />
               }
-              {/*Repeating logic the the two below because of some CSS annoying-ness*/}
               {
                 !get(user, 'hasPassword')
                 &&
@@ -100,13 +118,33 @@ export default class NavAuth extends Component {
                 />
               }
               {
-                !get(user, 'hasPassword')
+                loggedIn && !get(user, 'hasPassword')
                 &&
                 <button
                   className="local-auth-button"
-                  onClick={this.handleLocalAuth}
+                  onClick={this.addPassword}
                 >
-                  Post LocalAuth
+                  Add Password
+                </button>
+              }
+              {
+                !loggedIn
+                &&
+                <button
+                  className="local-auth-button"
+                  onClick={this.logIn}
+                >
+                  Log In
+                </button>
+              }
+              {
+                !loggedIn
+                &&
+                <button
+                  className="local-auth-button"
+                  onClick={this.signUp}
+                >
+                  Sign Up
                 </button>
               }
             </span>

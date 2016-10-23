@@ -10,19 +10,51 @@ export function localAuth(user) {
   };
 }
 
-export function localAuthRequest(_id, email, password) {
-  const addingPassword = !!_id;
-  const route = addingPassword ? '/auth/addPassword' : '/auth/login';
-  const body = addingPassword ? {
-    _id,
-    email
-  } : {
-    email,
-    password
-  };
+export function logIn(email, password) {
   return dispatch => request.post({
-    route,
-    body
+    route: '/auth/login',
+    body: {
+      email,
+      password
+    }
+  }).then(({ data: user }) =>
+    dispatch(localAuth({
+      ...user,
+      authErrorMessage: null
+    }))
+  ).catch(res =>
+    dispatch(localAuth({
+      authErrorMessage: get(res, 'response.body.error')
+    }))
+  );
+}
+
+export function signUp(email, password) {
+  return dispatch => request.post({
+    route: '/auth/signup',
+    body: {
+      email,
+      password
+    }
+  }).then(({ data: user }) =>
+    dispatch(localAuth({
+      ...user,
+      authErrorMessage: null
+    }))
+  ).catch(res =>
+    dispatch(localAuth({
+      authErrorMessage: get(res, 'response.body.error')
+    }))
+  );
+}
+
+export function addPassword(_id, password) {
+  return dispatch => request.post({
+    route: '/auth/addPassword',
+    body: {
+      _id,
+      password
+    }
   }).then(({ data: user }) =>
     dispatch(localAuth({
       ...user,
