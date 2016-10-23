@@ -61,7 +61,12 @@ export default class NavAuth extends Component {
     this.props.dispatch(addPassword(this.props.user._id, password));
   }
 
-  logout = () => this.props.dispatch(logoutRequest());
+  logout = () => {
+    if(this.props.currentRoute !== '/') {
+      this.props.dispatch(push('/'))
+    }
+    this.props.dispatch(logoutRequest());
+  }
 
   loginOnEnterKey = e => e.keyCode === 13 && this.logIn();
 
